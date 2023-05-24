@@ -5,6 +5,8 @@ import store from './store'
 import '@/styles/index.less'
 import Vant from 'vant'
 import 'vant/lib/index.css';
+// 加载动态设置 REM 基准值
+import 'amfe-flexible'
 
 Vue.config.productionTip = false
 
