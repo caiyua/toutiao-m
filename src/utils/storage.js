@@ -32,7 +32,6 @@ export const getItem = (key) => {
 /*
  * 删除数据
  * */
-
 export const removeItem = (key) => {
 	window.localStorage.removeItem(key)
 }
