@@ -29,11 +29,24 @@
 		<!--登录表单-->
 		<van-form @submit="onSubmit">
 			<!-- 手机号 -->
-			<van-field type="number" name="手机号" placeholder="请输入手机号" v-model="user.mobile"
+			<van-field
+				type="tel"
+				name="手机号"
+				placeholder="请输入手机号"
+				v-model="user.mobile"
+				:rules="userFormRules.mobile"
+				maxlength="11"
 				><i slot="left-icon" class="toutiao toutiao-shouji"></i
 			></van-field>
 			<!-- 验证码 -->
-			<van-field type="number" name="验证码" placeholder="请输入验证码" v-model="user.code">
+			<van-field
+				type="number"
+				name="验证码"
+				placeholder="请输入验证码"
+				v-model="user.code"
+				:rules="userFormRules.code"
+				maxlength="6"
+			>
 				<i slot="left-icon" class="toutiao toutiao-yanzhengma"></i>
 				<template #button>
 					<van-button round size="small" type="default" class="send-sms-btn"
@@ -66,6 +79,16 @@ export default {
 			user: {
 				mobile: '',
 				code: '',
+			},
+			userFormRules: {
+				mobile: [
+					{ required: true, message: '手机号不能为空' },
+					{ pattern: /^1[3|5|7|8]\d{9}$/, message: '手机号格式错误' },
+				],
+				code: [
+					{ required: true, message: '验证码不能为空' },
+					{ pattern: /^\d{6}$/, message: '验证码长度必须为六位数' },
+				],
 			},
 		}
 	},
