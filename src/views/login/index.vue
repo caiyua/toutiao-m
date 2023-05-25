@@ -12,7 +12,9 @@
 		font-size: 22px;
 		color: #666;
 	}
-	.count_down { color: #dcdcdc;}
+	.count_down {
+		color: #dcdcdc;
+	}
 	.login-btn-wrap {
 		padding: 53px 33px;
 		.login-btn {
@@ -52,7 +54,12 @@
 				<template #button>
 					<!-- 倒计时 -->
 					<template v-if="isCountDownShow">
-						<van-count-down :time="time" format="ss 秒" class="count_down" @finish="isCountDownShow = !isCountDownShow" />
+						<van-count-down
+							:time="time"
+							format="ss 秒"
+							class="count_down"
+							@finish="isCountDownShow = !isCountDownShow"
+						/>
 					</template>
 					<template v-else>
 						<van-button
@@ -78,7 +85,7 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, sendSms } from '@/api/user'
 export default {
 	name: 'LoginIndex',
 	data() {
@@ -100,7 +107,7 @@ export default {
 				],
 			},
 			// 验证码倒计时
-			time: 1000 * 6,
+			time: 1000 * 60,
 			// 是否展示倒计时
 			isCountDownShow: false,
 		}
@@ -143,6 +150,17 @@ export default {
 			// 2.验证通过，显示倒计时
 			this.isCountDownShow = true
 			// 3.请求发布验证码
+			try {
+				await sendSms(this.user.mobile)
+				this.$toast('发送成功')
+			} catch (err) {
+				this.isCountDownShow = false
+				if (err.response.status === 429) {
+					this.$toast('发送频繁，请稍后重试')
+				} else {
+					this.$toast('发送失败，请稍后重试')
+				}
+			}
 		},
 	},
 	computed: {
