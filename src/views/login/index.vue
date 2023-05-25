@@ -115,16 +115,14 @@ export default {
 	methods: {
 		// 表单提交
 		async onSubmit() {
-			const user = this.user
 			this.$toast.loading({
 				forbidClick: true,
 				duration: 0, // 值为0则持续展示，不会自动消失
 			})
 			try {
 				// 成功后的交互
-				const res = await login(user)
-				const data = res.data
-				console.log(data)
+				const { data } = await login(this.user)
+				this.$store.commit('setUser', data.data)
 				this.$toast.success({
 					message: '登录成功...',
 					forbidClick: true,
