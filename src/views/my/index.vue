@@ -97,13 +97,9 @@
 			<div class="user_info">
 				<div class="base_info">
 					<div class="left">
-						<van-image
-							class="avater"
-							src="https://img.yzcdn.cn/vant/cat.jpeg"
-							round
-							fit="cover"
-						></van-image>
-						<div class="nick_name">肖才渊</div>
+						<!-- 用户头像 -->
+						<van-image class="avater" :src="userSelfInfo.photo" round fit="cover"></van-image>
+						<div class="nick_name">{{ userSelfInfo.name }}</div>
 					</div>
 					<div class="edit_wrap">
 						<van-button size="mini" round>编辑资料</van-button>
@@ -111,19 +107,19 @@
 				</div>
 				<div class="data_stats">
 					<div class="item">
-						<div class="count">10</div>
+						<div class="count">{{ userSelfInfo.art_count }}</div>
 						<div class="thing">头条</div>
 					</div>
 					<div class="item">
-						<div class="count">10</div>
+						<div class="count">{{ userSelfInfo.follow_count }}</div>
 						<div class="thing">关注</div>
 					</div>
 					<div class="item">
-						<div class="count">10</div>
+						<div class="count">{{ userSelfInfo.fans_count }}</div>
 						<div class="thing">粉丝</div>
 					</div>
 					<div class="item">
-						<div class="count">10</div>
+						<div class="count">{{ userSelfInfo.like_count }}</div>
 						<div class="thing">获赞</div>
 					</div>
 				</div>
@@ -156,14 +152,25 @@
 
 <script>
 import { mapState } from 'vuex'
-
+import { getUserInfo } from '@/api/user'
 export default {
 	name: 'index',
+	data() {
+		return {
+			// 用户自身信息
+			userSelfInfo: {},
+		}
+	},
+	computed: {
+		...mapState(['user_token']),
+	},
 	methods: {
+		// 退出登录
 		logOut() {
-			this.$dialog.confirm({
-				title: '退出登录',
-			})
+			this.$dialog
+				.confirm({
+					title: '退出登录',
+				})
 				.then(() => {
 					// on confirm
 					this.$store.commit('setUser', null)
@@ -172,9 +179,22 @@ export default {
 					// on cancel
 				})
 		},
+		// 获取用户自己信息
+		async loadUserInfo() {
+			try {
+				const { data } = await getUserInfo()
+				this.userSelfInfo = data.data
+				console.log(this.userSelfInfo)
+			} catch (err) {
+				this.$toast('加载失败，请稍后重试')
+			}
+		},
 	},
-	computed: {
-		...mapState(['user_token']),
+	created() {
+		// 应用初始化时，如果处于登录状态，则调用函数加载用户信息
+		if (this.user_token) {
+			this.loadUserInfo()
+		}
 	},
 }
 </script>
