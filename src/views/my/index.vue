@@ -83,14 +83,17 @@
 	.custom_cell {
 		margin: 20px 0;
 	}
-	.log_out { text-align: center;color: #f66;}
+	.log_out {
+		text-align: center;
+		color: #f66;
+	}
 }
 </style>
 
 <template>
 	<div class="my">
 		<!-- 已登录头部 -->
-		<div class="header Logged_in" v-if='user_token'>
+		<div class="header Logged_in" v-if="user_token">
 			<div class="user_info">
 				<div class="base_info">
 					<div class="left">
@@ -147,7 +150,7 @@
 			<van-cell title="消息通知" is-link />
 			<van-cell title="小智同学" is-link />
 		</div>
-		<van-cell class='log_out' title="退出登录" v-if='user_token'/>
+		<van-cell class="log_out" title="退出登录" v-if="user_token" clickable @click="logOut" />
 	</div>
 </template>
 
@@ -156,8 +159,22 @@ import { mapState } from 'vuex'
 
 export default {
 	name: 'index',
+	methods: {
+		logOut() {
+			this.$dialog.confirm({
+				title: '退出登录',
+			})
+				.then(() => {
+					// on confirm
+					this.$store.commit('setUser', null)
+				})
+				.catch(() => {
+					// on cancel
+				})
+		},
+	},
 	computed: {
-		...mapState(['user_token'])
-	}
+		...mapState(['user_token']),
+	},
 }
 </script>
