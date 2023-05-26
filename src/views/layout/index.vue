@@ -17,8 +17,7 @@
 		<!-- 标签导航栏 -->
 		<van-tabbar class="tabbar_container" route>
 			<van-tabbar-item to="/home"
-				><i slot="icon" class="toutiao toutiao-shouye"></i
-				><span class="tabbar_text">首页</span>
+				><i slot="icon" class="toutiao toutiao-shouye"></i><span class="tabbar_text">首页</span>
 			</van-tabbar-item>
 			<van-tabbar-item to="/qa"
 				><i slot="icon" class="toutiao toutiao-wenda"></i>
@@ -29,7 +28,7 @@
 				><span class="tabbar_text">视频</span></van-tabbar-item
 			><van-tabbar-item to="/my"
 				><i slot="icon" class="toutiao toutiao-wode"></i
-				><span class="tabbar_text">我的</span></van-tabbar-item
+				><span class="tabbar_text">{{ $store.state.user_token ? '我的' : '未登录' }}</span></van-tabbar-item
 			>
 		</van-tabbar>
 	</div>

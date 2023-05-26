@@ -66,18 +66,31 @@
 			}
 		}
 	}
+	.grid_nav {
+		i.toutiao {
+			font-size: 45px;
+		}
+		.toutiao-shoucang {
+			color: #eb5253;
+		}
+		.toutiao-lishi {
+			color: #ff9d1d;
+		}
+		span {
+			font-size: 28px;
+		}
+	}
+	.custom_cell {
+		margin: 20px 0;
+	}
+	.log_out { text-align: center;color: #f66;}
 }
 </style>
 
 <template>
 	<div class="my">
-		<div class="header not_login">
-			<div class="login_btn" @click="$router.push('/login')">
-				<img src="@/assets/mobile.png" alt="" class="mobile_img" />
-				<span class="lr_text">登录 / 注册</span>
-			</div>
-		</div>
-		<div class="header Logged_in">
+		<!-- 已登录头部 -->
+		<div class="header Logged_in" v-if='user_token'>
 			<div class="user_info">
 				<div class="base_info">
 					<div class="left">
@@ -113,11 +126,38 @@
 				</div>
 			</div>
 		</div>
+		<!-- 未登录头部 -->
+		<div class="header not_login" v-else>
+			<div class="login_btn" @click="$router.push('/login')">
+				<img src="@/assets/mobile.png" alt="" class="mobile_img" />
+				<span class="lr_text">登录 / 注册</span>
+			</div>
+		</div>
+		<!-- 宫格导航 -->
+		<van-grid class="grid_nav" :column-num="2" clickable>
+			<van-grid-item class="grid_item"
+				><i Slot="icon" class="toutiao toutiao-shoucang"></i><span Slot="text">收藏</span></van-grid-item
+			>
+			<van-grid-item class="grid_item"
+				><i Slot="icon" class="toutiao toutiao-lishi"></i><span Slot="text">历史</span></van-grid-item
+			>
+		</van-grid>
+		<!-- 单元格 -->
+		<div class="custom_cell">
+			<van-cell title="消息通知" is-link />
+			<van-cell title="小智同学" is-link />
+		</div>
+		<van-cell class='log_out' title="退出登录" v-if='user_token'/>
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
 	name: 'index',
+	computed: {
+		...mapState(['user_token'])
+	}
 }
 </script>

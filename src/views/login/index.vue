@@ -129,6 +129,8 @@ export default {
 					message: '登录成功...',
 					forbidClick: true,
 				})
+				// back的方式不严谨，后面再优化
+				this.$router.back()
 			} catch (err) {
 				// 失败后的交互
 				const status = err.response.status
