@@ -32,10 +32,10 @@ export const getUserInfo = () => {
 		method: 'GET',
 		url: '/v1_0/user',
 		// 发送请求头数据
-		headers: {
-			// 一定要是token字符串，而不是一个对象什么的，别把刷新令牌也放进来！
-			Authorization: `Bearer ${store.state.user_token.token}`,
-		},
-	});
+		// headers: {
+		// 	// 一定要是token字符串，而不是一个对象什么的，别把刷新令牌也放进来！
+		// 	Authorization: `Bearer ${store.state.user_token.token}`,
+		// },
+	})
 	
 }

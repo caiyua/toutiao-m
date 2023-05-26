@@ -184,7 +184,6 @@ export default {
 			try {
 				const { data } = await getUserInfo()
 				this.userSelfInfo = data.data
-				console.log(this.userSelfInfo)
 			} catch (err) {
 				this.$toast('加载失败，请稍后重试')
 			}
