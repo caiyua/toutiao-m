@@ -15,7 +15,7 @@
 	<div class="layout">
 		<router-view></router-view>
 		<!-- 标签导航栏 -->
-		<van-tabbar class="tabbar_container" route>
+		<van-tabbar class="tabbar_container" route placeholder>
 			<van-tabbar-item to="/home"
 				><i slot="icon" class="toutiao toutiao-shouye"></i><span class="tabbar_text">首页</span>
 			</van-tabbar-item>

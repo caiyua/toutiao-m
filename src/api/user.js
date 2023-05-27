@@ -1,12 +1,6 @@
-/*
- * 用户相关请求
- * */
-
-/****************** 导入 **************************/
+// 用户相关请求
 // 导入axios请求模块
 import request from '@/utils/request'
-// 导入vuex
-import store from '@/store'
 /****************** 导入-End **************************/
 
 // 登录
@@ -38,4 +32,12 @@ export const getUserInfo = () => {
 		// },
 	})
 	
+}
+
+// 获取用户频道列表
+export const getUserChannels = () => {
+    return request({
+	    method: 'GET',
+	    url: '/v1_0/user/channels'
+    })
 }

@@ -91,24 +91,47 @@
 		<van-cell class="search_wrap">
 			<van-button class="search_btn" type="info" round icon="search">搜索</van-button>
 		</van-cell>
-		<!-- 滑动标签页 -->
-		<van-tabs v-model="active" swipeable animated>
-			<van-tab v-for="index in 6" :title="'选项 ' + index"> 内容 {{ index }} </van-tab>
+		<!-- 频道列表 -->
+		<van-tabs v-model="active" swipeable animated duration=".5">
+			<van-tab v-for="item in channelNames" :key="item.id" :title="item.name">
+				<!-- 文章列表 -->
+				<articleList :channel="item" />
+			</van-tab>
 			<div class="menu_space" slot="nav-right"></div>
 			<div class="menu_wrap" slot="nav-right"><i class="toutiao toutiao-gengduo"></i></div>
 		</van-tabs>
+		<!-- -->
 	</div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-
-export default defineComponent({
+import { getUserChannels } from '@/api/user'
+import ArticleList from '@/components/article-list.vue'
+export default {
 	name: 'index',
+	components: { ArticleList },
 	data() {
 		return {
+			// 初始化选中的频道
 			active: 0,
+			// 频道列表名
+			channelNames: [],
 		}
 	},
-})
+	methods: {
+		async loadingChannel() {
+			try {
+				const { data } = await getUserChannels()
+				this.channelNames = data.data.channels
+			} catch (err) {
+				this.$toast('获取频道数据失败')
+			}
+		},
+	},
+	created() {
+		if (this.$store.state.user_token) {
+			this.loadingChannel()
+		}
+	},
+}
 </script>
