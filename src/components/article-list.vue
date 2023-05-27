@@ -2,16 +2,23 @@
 
 <template>
 	<div class="article_list">
-		<van-list
-			v-model="loading"
-			:finished="finished"
-			finished-text="没有更多了"
-			@load="onLoad"
-			:error.sync="error"
-			error-text="请求失败，点击重新加载"
+		<van-pull-refresh
+			v-model="isRefreshLoading"
+			@refresh="onRefresh"
+			:success-text="successText"
+			animation-duration="1000"
 		>
-			<van-cell v-for="(article, index) in list" :key="index" :title="article.title" />
-		</van-list>
+			<van-list
+				v-model="loading"
+				:finished="finished"
+				finished-text="没有更多了"
+				@load="onLoad"
+				:error.sync="error"
+				error-text="请求失败，点击重新加载"
+			>
+				<van-cell v-for="(article, index) in list" :key="index" :title="article.title" />
+			</van-list>
+		</van-pull-refresh>
 	</div>
 </template>
 
@@ -28,22 +35,19 @@ export default {
 	},
 	data() {
 		return {
-			// 文章列表
-			list: [],
-			// 控制加载中 loading 状态
-			loading: false,
-			// 控制数据加载结束的状态
-			finished: false,
-			// 请求获取下一页数据的时间戳
-			timestamp: null,
-			// 请求的状态：成功或错误
-			error: false,
+			list: [], // 文章列表
+			loading: false, // 控制加载中 loading 状态
+			finished: false, // 控制数据加载结束的状态
+			timestamp: null, // 请求获取下一页数据的时间戳
+			error: false, // 请求的状态：成功或错误
+			isRefreshLoading: false, // 控制下拉刷新的状态
+			successText: '刷新成功', // 下拉刷新成功提示文本
 		}
 	},
 	methods: {
 		async onLoad() {
 			// 1.获取到数据
-			// 2.把请求结果数据放到list数组中（能够渲染出页面）
+			// 2.把请求结果数据放到list数组中（渲染出页面就行）
 			// 3.本次数据加载结束之后要把加载状态设置为结束
 			// 4.判断数据是否全部加载完成
 			try {
@@ -70,6 +74,26 @@ export default {
 				// loading状态
 				this.loading = false
 				console.log('加载文章列表失败', err)
+			}
+		},
+		async onRefresh() {
+			/* 所谓下拉刷新，实际就是将新的数据添加到最顶部，和上滑加载相反*/
+			// 1.请求获取数据
+			// 2.将数据追加到列表的顶部
+			// 3.关闭下拉刷新的loading状态
+			try {
+				const { data } = await getArticles({
+					channel_id: this.channel.id,
+					timestamp: Date.now(),
+					with_top: 1,
+				})
+				const { results } = data.data
+				this.list.unshift(...data.data.results)
+				this.isRefreshLoading = false
+				this.successText = `刷新成功，更新了${results.length}条数据`
+			} catch (err) {
+				this.successText = '刷新失败'
+				this.isRefreshLoading = false
 			}
 		},
 	},
