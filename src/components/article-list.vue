@@ -1,4 +1,6 @@
-<style scoped lang="less"></style>
+<style scoped lang="less">
+.article_list {height: 76vh;overflow-y: auto;}
+</style>
 
 <template>
 	<div class="article_list">
