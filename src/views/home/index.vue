@@ -1,33 +1,41 @@
 <style scoped lang="less">
 .home {
-	.search_wrap {
+	padding-top: (128px + 82);
+	/deep/ .search_wrap {
+		width: 100%;
+		height: auto !important;
 		background-color: @color;
-		.flex;
-		.j_center;
-		.a_center;
-		padding: 30px 0 40px;
-		.van-cell__value {
-			.flex;
-			.j_center;
-			.search_btn {
-				width: 555px;
-				height: 64px;
-				background-color: rgba(255, 255, 255, 0.2);
-				border: 0;
-				font-size: 28px;
-				color: #fff;
-				.van-icon {
-					font-size: 32px;
+		.van-nav-bar {
+			background-color: @color;
+		}
+		.van-nav-bar__content {
+			height: 100%;
+			.van-nav-bar__title {
+				max-width: unset;
+				width: 100%;
+				padding: 20px 0;
+				.search_btn {
+					width: 80%;
+					background-color: rgba(255, 255, 255, 0.2);
+					.van-button__content {
+						i {
+							color: #fff;
+						}
+					}
 				}
 			}
 		}
 	}
+
 	.van-cell::after {
 		border: 0;
 	}
 
 	/deep/ .van-tabs__wrap {
-		height: 88px;
+		height: auto;
+		position: fixed;
+		top: 128px;
+		z-index: 2;
 		padding-bottom: 0 !important;
 		.van-tabs__nav {
 			padding: 0;
@@ -88,9 +96,10 @@
 <template>
 	<div class="home">
 		<!-- 搜索栏-->
-		<van-cell class="search_wrap">
-			<van-button class="search_btn" type="info" round icon="search">搜索</van-button>
-		</van-cell>
+		<van-nav-bar class="search_wrap" fixed placeholder>
+			<van-button class="search_btn" type="info" round icon="search" slot="title">搜索</van-button>
+		</van-nav-bar>
+
 		<!-- 频道列表 -->
 		<van-tabs v-model="active" swipeable animated duration=".5">
 			<van-tab v-for="item in channelNames" :key="item.id" :title="item.name">
